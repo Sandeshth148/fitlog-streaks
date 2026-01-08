@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  publish = "dist/fitlog-streaks/browser"
+  publish = "dist/fitlog-streaks"
 
 [[redirects]]
   from = "/*"
