@@ -3,7 +3,7 @@
 	"version": 1,
 	"newProjectRoot": "projects",
 	"projects": {
-		"fitlog-streaks": {
+		"fitlog-tasks-2": {
 			"projectType": "application",
 			"schematics": {
 				"@schematics/angular:component": {
@@ -19,10 +19,10 @@
 					"options": {},
 					"configurations": {
 						"production": {
-							"target": "fitlog-streaks:esbuild:production"
+							"target": "fitlog-tasks-2:esbuild:production"
 						},
 						"development": {
-							"target": "fitlog-streaks:esbuild:development",
+							"target": "fitlog-tasks-2:esbuild:development",
 							"dev": true
 						}
 					},
@@ -31,10 +31,10 @@
 				"serve": {
 					"builder": "@angular-architects/native-federation:build",
 					"options": {
-						"target": "fitlog-streaks:serve-original:development",
+						"target": "fitlog-tasks-2:serve-original:development",
 						"rebuildDelay": 0,
 						"dev": true,
-						"port": 0
+						"port": 4208
 					}
 				},
 				"extract-i18n": {
@@ -64,7 +64,7 @@
 				"esbuild": {
 					"builder": "@angular-devkit/build-angular:application",
 					"options": {
-						"outputPath": "dist/fitlog-streaks",
+						"outputPath": "dist/fitlog-tasks-2",
 						"index": "src/index.html",
 						"browser": "src/main.ts",
 						"polyfills": [
@@ -112,15 +112,15 @@
 					"builder": "@angular-devkit/build-angular:dev-server",
 					"configurations": {
 						"production": {
-							"buildTarget": "fitlog-streaks:esbuild:production"
+							"buildTarget": "fitlog-tasks-2:esbuild:production"
 						},
 						"development": {
-							"buildTarget": "fitlog-streaks:esbuild:development"
+							"buildTarget": "fitlog-tasks-2:esbuild:development"
 						}
 					},
 					"defaultConfiguration": "development",
 					"options": {
-						"port": 4204
+						"port": 4208
 					}
 				}
 			}

@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { StreaksComponent } from './features/streaks/streaks.component';
+import { TasksComponent } from './features/tasks/tasks.component';
 
 @Component({
   selector: 'app-root',
-  imports: [StreaksComponent],
-  template: '<app-streaks></app-streaks>',
+  standalone: true,
+  imports: [TasksComponent],
+  templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'fitlog-streaks';
+  title = 'fitlog-tasks-2';
 }

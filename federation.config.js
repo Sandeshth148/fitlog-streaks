@@ -2,10 +2,10 @@ const { withNativeFederation, shareAll } = require('@angular-architects/native-f
 
 module.exports = withNativeFederation({
 
-  name: 'fitlog-streaks',
+  name: 'fitlog-task-tracker',
 
   exposes: {
-    './Component': './src/app/features/streaks/streaks.component.ts',
+    './Component': './src/app/features/tasks/tasks.component.ts',
   },
 
   shared: {
