@@ -8,6 +8,11 @@ export interface Task {
   createdAt: Date;
   updatedAt: Date;
   tags?: string[];
+  recurrence: 'none' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly';
+  lastCompleted?: Date;
+  completionCount: number;
+  archived: boolean;
+  nextDueDate?: Date;
 }
 
 export interface TaskFilter {

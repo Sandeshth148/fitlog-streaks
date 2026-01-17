@@ -1,22 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { NotificationService } from '../../services/notification.service';
-
-interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  completed: boolean;
-  priority: 'low' | 'medium' | 'high';
-  dueDate?: Date;
-  createdAt: Date;
-  recurrence: 'none' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly';
-  lastCompleted?: Date;
-  completionCount: number;
-  archived: boolean;
-  nextDueDate?: Date;
-}
+import { Task } from '../../models/task.model';
+import * as TaskActions from '../../store/task.actions';
+import * as TaskSelectors from '../../store/task.selectors';
 
 @Component({
   selector: 'app-enhanced-task-tracker',
