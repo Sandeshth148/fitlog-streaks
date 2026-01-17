@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { NotificationService } from '../../services/notification.service';
 import { Task } from '../../models/task.model';
@@ -800,13 +800,24 @@ export class EnhancedTaskTrackerComponent implements OnInit, OnDestroy {
 
   Math = Math;
   notificationsEnabled = false;
+  private destroy$ = new Subject<void>();
 
-  constructor(private notificationService: NotificationService) {}
+  constructor(
+    private notificationService: NotificationService,
+    private store: Store
+  ) {}
 
   ngOnInit() {
-    this.loadTasks();
+    this.store.dispatch(TaskActions.loadTasks());
+    
+    this.store.select(TaskSelectors.selectAllTasks)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(tasks => {
+        this.tasks = tasks;
+        this.applyFilter();
+      });
+    
     this.checkRecurringTasks();
-    this.applyFilter();
     this.initializeWorker();
     this.checkNotificationPermission();
     
@@ -838,14 +849,11 @@ export class EnhancedTaskTrackerComponent implements OnInit, OnDestroy {
   }
 
   loadTasks() {
-    const stored = localStorage.getItem('fitlog-tasks-enhanced');
-    if (stored) {
-      this.tasks = JSON.parse(stored);
-    }
+    this.store.dispatch(TaskActions.loadTasks());
   }
 
   saveTasks() {
-    localStorage.setItem('fitlog-tasks-enhanced', JSON.stringify(this.tasks));
+    // No longer needed - NgRx effects handle persistence to IndexedDB
   }
 
   checkRecurringTasks() {
@@ -905,42 +913,35 @@ export class EnhancedTaskTrackerComponent implements OnInit, OnDestroy {
     if (!this.formData.title.trim()) return;
 
     if (this.editingTask) {
-      const index = this.tasks.findIndex(t => t.id === this.editingTask!.id);
-      if (index !== -1) {
-        this.tasks[index] = {
-          ...this.editingTask,
-          title: this.formData.title,
-          description: this.formData.description,
-          priority: this.formData.priority,
-          recurrence: this.formData.recurrence,
-          dueDate: this.formData.dueDate ? new Date(this.formData.dueDate) : undefined,
-          nextDueDate: this.formData.recurrence !== 'none' 
-            ? this.calculateNextDueDate(this.formData.recurrence, new Date())
-            : undefined
-        };
-      }
+      const updatedTask: Task = {
+        ...this.editingTask,
+        title: this.formData.title,
+        description: this.formData.description,
+        priority: this.formData.priority,
+        recurrence: this.formData.recurrence,
+        dueDate: this.formData.dueDate ? new Date(this.formData.dueDate) : undefined,
+        updatedAt: new Date(),
+        nextDueDate: this.formData.recurrence !== 'none' 
+          ? this.calculateNextDueDate(this.formData.recurrence, new Date())
+          : undefined
+      };
+      this.store.dispatch(TaskActions.updateTask({ task: updatedTask }));
     } else {
-      const newTask: Task = {
-        id: Date.now().toString(),
+      const newTask = {
         title: this.formData.title,
         description: this.formData.description,
         completed: false,
         priority: this.formData.priority,
         recurrence: this.formData.recurrence,
         dueDate: this.formData.dueDate ? new Date(this.formData.dueDate) : undefined,
-        createdAt: new Date(),
-        updatedAt: new Date(),
         completionCount: 0,
         archived: false,
         nextDueDate: this.formData.recurrence !== 'none' 
           ? this.calculateNextDueDate(this.formData.recurrence, new Date())
           : undefined
       };
-      this.tasks.unshift(newTask);
+      this.store.dispatch(TaskActions.addTask({ task: newTask }));
     }
-
-    this.saveTasks();
-    this.applyFilter();
     
     // Show notification when task is created
     if (this.notificationsEnabled && !this.editingTask) {
@@ -969,47 +970,27 @@ export class EnhancedTaskTrackerComponent implements OnInit, OnDestroy {
 
   deleteTask(id: string) {
     if (confirm('Are you sure you want to delete this task?')) {
-      this.tasks = this.tasks.filter(t => t.id !== id);
-      this.saveTasks();
-      this.applyFilter();
+      this.store.dispatch(TaskActions.deleteTask({ id }));
     }
   }
 
   toggleComplete(id: string) {
-    const task = this.tasks.find(t => t.id === id);
-    if (task && !task.archived) {
-      task.completed = !task.completed;
-      
-      if (task.completed) {
-        task.lastCompleted = new Date();
-        task.completionCount = (task.completionCount || 0) + 1;
-        
-        // For recurring tasks, calculate next due date
-        if (task.recurrence !== 'none') {
-          task.nextDueDate = this.calculateNextDueDate(task.recurrence, new Date());
-        }
-      }
-      
-      this.saveTasks();
-      this.applyFilter();
-    }
+    this.store.dispatch(TaskActions.toggleTaskCompletion({ id }));
   }
 
   archiveTask(id: string) {
     const task = this.tasks.find(t => t.id === id);
     if (task) {
-      task.archived = true;
-      this.saveTasks();
-      this.applyFilter();
+      const updatedTask = { ...task, archived: true, updatedAt: new Date() };
+      this.store.dispatch(TaskActions.updateTask({ task: updatedTask }));
     }
   }
 
   unarchiveTask(id: string) {
     const task = this.tasks.find(t => t.id === id);
     if (task) {
-      task.archived = false;
-      this.saveTasks();
-      this.applyFilter();
+      const updatedTask = { ...task, archived: false, updatedAt: new Date() };
+      this.store.dispatch(TaskActions.updateTask({ task: updatedTask }));
     }
   }
 
@@ -1143,6 +1124,9 @@ export class EnhancedTaskTrackerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+    
     if (this.worker) {
       this.worker.terminate();
     }
