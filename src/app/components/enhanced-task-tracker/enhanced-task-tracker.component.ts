@@ -929,6 +929,7 @@ export class EnhancedTaskTrackerComponent implements OnInit, OnDestroy {
         recurrence: this.formData.recurrence,
         dueDate: this.formData.dueDate ? new Date(this.formData.dueDate) : undefined,
         createdAt: new Date(),
+        updatedAt: new Date(),
         completionCount: 0,
         archived: false,
         nextDueDate: this.formData.recurrence !== 'none' 
