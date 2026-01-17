@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { map, catchError, switchMap, tap } from 'rxjs/operators';
@@ -7,6 +7,9 @@ import { TaskStorageService } from '../services/task-storage.service';
 
 @Injectable()
 export class TaskEffects {
+  private actions$ = inject(Actions);
+  private taskStorage = inject(TaskStorageService);
+
   loadTasks$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TaskActions.loadTasks),
@@ -66,9 +69,4 @@ export class TaskEffects {
       )
     )
   );
-
-  constructor(
-    private actions$: Actions,
-    private taskStorage: TaskStorageService
-  ) {}
 }
