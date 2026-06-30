@@ -194,10 +194,10 @@ import { TranslatePipe } from '../../core/pipes/translate.pipe';
     }
  
     .streak-card {
-      background: var(--color-card-bg, var(--color-surface));
-      backdrop-filter: blur(var(--glass-blur, 16px)) saturate(180%);
-      -webkit-backdrop-filter: blur(var(--glass-blur, 16px)) saturate(180%);
-      border: 1px solid var(--color-card-border, var(--color-border));
+      background: var(--color-surface);
+      backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+      border: 1px solid var(--glass-border);
       border-radius: 20px;
       padding: 2.5rem 2rem;
       text-align: center;
@@ -266,10 +266,10 @@ import { TranslatePipe } from '../../core/pipes/translate.pipe';
     }
  
     .badge-card {
-      background: var(--color-card-bg, var(--color-surface));
-      backdrop-filter: blur(var(--glass-blur, 16px)) saturate(180%);
-      -webkit-backdrop-filter: blur(var(--glass-blur, 16px)) saturate(180%);
-      border: 1px solid var(--color-card-border, var(--color-border));
+      background: var(--color-surface);
+      backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+      border: 1px solid var(--glass-border);
       border-radius: 18px;
       padding: 2rem 1.5rem;
       text-align: center;
@@ -363,10 +363,10 @@ import { TranslatePipe } from '../../core/pipes/translate.pipe';
     }
  
     .info-card {
-      background: var(--color-card-bg, var(--color-surface));
-      backdrop-filter: blur(var(--glass-blur, 16px)) saturate(180%);
-      -webkit-backdrop-filter: blur(var(--glass-blur, 16px)) saturate(180%);
-      border: 1px solid var(--color-card-border, var(--color-border));
+      background: var(--color-surface);
+      backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+      border: 1px solid var(--glass-border);
       border-radius: 18px;
       padding: 2.5rem 2rem;
       text-align: center;
