@@ -194,10 +194,10 @@ import { TranslatePipe } from '../../core/pipes/translate.pipe';
     }
  
     .streak-card {
-      background: var(--color-surface);
+      background: var(--color-card-bg, var(--color-surface));
       backdrop-filter: blur(var(--glass-blur)) saturate(180%);
       -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-      border: 1px solid var(--glass-border);
+      border: 1px solid var(--color-card-border, var(--glass-border));
       border-radius: 20px;
       padding: 2.5rem 2rem;
       text-align: center;
@@ -232,9 +232,7 @@ import { TranslatePipe } from '../../core/pipes/translate.pipe';
       font-size: 3.25rem;
       font-weight: 800;
       font-family: 'Outfit', sans-serif;
-      background: var(--gradient-primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--color-primary, #4f46e5);
       margin: 0.75rem 0;
     }
  
@@ -266,10 +264,10 @@ import { TranslatePipe } from '../../core/pipes/translate.pipe';
     }
  
     .badge-card {
-      background: var(--color-surface);
+      background: var(--color-card-bg, var(--color-surface));
       backdrop-filter: blur(var(--glass-blur)) saturate(180%);
       -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-      border: 1px solid var(--glass-border);
+      border: 1px solid var(--color-card-border, var(--glass-border));
       border-radius: 18px;
       padding: 2rem 1.5rem;
       text-align: center;
@@ -321,9 +319,10 @@ import { TranslatePipe } from '../../core/pipes/translate.pipe';
     }
  
     .badge-card.locked {
-      opacity: 0.5;
+      opacity: 0.55;
       filter: grayscale(100%);
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(var(--color-primary-rgb, 79, 70, 229), 0.03);
+      border-color: var(--color-card-border, rgba(0, 0, 0, 0.05));
     }
  
     .badge-icon {
@@ -363,10 +362,10 @@ import { TranslatePipe } from '../../core/pipes/translate.pipe';
     }
  
     .info-card {
-      background: var(--color-surface);
+      background: var(--color-card-bg, var(--color-surface));
       backdrop-filter: blur(var(--glass-blur)) saturate(180%);
       -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-      border: 1px solid var(--glass-border);
+      border: 1px solid var(--color-card-border, var(--glass-border));
       border-radius: 18px;
       padding: 2.5rem 2rem;
       text-align: center;
